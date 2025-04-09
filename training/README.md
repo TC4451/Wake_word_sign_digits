@@ -13,7 +13,7 @@ The Wake word used was “House”. The data set used to train the WakeWord CNN 
 
 <h2><ins>Wake Word Training Code Location</ins></h2>
 
-[Training/Wake_Word.py](https://github.com/TC4451/Wake_word_sign_digits/blob/main/training/Sign_Language.py) contains all the code to train the Wake Word CNN.
+[Training/Wake_Word.py](https://github.com/TC4451/Wake_word_sign_digits/blob/main/training/Wake_Word.py) contains all the code to train the Wake Word CNN.
 
 
 <h2><ins>Wake Word Preprocessing</ins></h2>
