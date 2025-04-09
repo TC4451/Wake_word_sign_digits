@@ -1,4 +1,5 @@
 Wake Word/Sign Language Door Locking System
+
 Objective: Create an accessible door unlocking system to aid those with the inability to use traditional methods (key, keypad, etc). EX. persons with impairments and mobility limitations.
 Use Case: Wake word will turn on camera, then a 4 digit code will need to be detected to unlock the door.
 
