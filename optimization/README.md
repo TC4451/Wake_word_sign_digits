@@ -8,7 +8,7 @@ Documentation at - [LiteRT overview](https://ai.google.dev/edge/litert)
 
 <h2>Lite RT Optimization Code</h2>
 
-All code can be found in [/optimization/WW_LiteRT_Optimization.py](https://github.com/TC4451/Wake_word_sign_digits/blob/main/optimization/WW_LiteRT_Optimization_tfile.py) & [/optimization/Evaluate_Optmitizied_tfile.py](https://github.com/TC4451/Wake_word_sign_digits/blob/main/optimization/Evaluate_Optimizied_tfile.py)
+All code can be found in [/optimization/WW_LiteRT_Optimization.py](https://github.com/TC4451/Wake_word_sign_digits/blob/main/optimization/WW_LiteRT_Optimization.py) & [/optimization/Evaluate_Optmitizied_tfile.py](https://github.com/TC4451/Wake_word_sign_digits/blob/main/optimization/Evaluate_Optimizied_tfile.py)
 
 <h2>Process and Results</h2>
 
