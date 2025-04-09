@@ -13,7 +13,7 @@ The Wake word used was “House”. The data set used to train the WakeWord CNN 
 
 <h2><ins>Wake Word Training Code Location</ins></h2>
 
-Training/Wake_Word.py contains all the code to train the Wake Word CNN.
+[Training/Wake_Word.py](https://github.com/TC4451/Wake_word_sign_digits/blob/main/training/Sign_Language.py) contains all the code to train the Wake Word CNN.
 
 
 <h2><ins>Wake Word Preprocessing</ins></h2>
@@ -62,7 +62,7 @@ The CNN does recognize 27 outputs but anything not 0-9 is assumed a non-signal.
 
 <h2><ins>Sign Language Training Code Location</ins></h2>
 
-Training/Sign_Language.py contains all the code to train the sign language detection model.
+[training/Sign_Language.py](https://github.com/TC4451/Wake_word_sign_digits/blob/main/training/Sign_Language.py) contains all the code to train the sign language detection model.
 
 <h2><ins>Sign Language Preprocessing</ins></h2>
 
