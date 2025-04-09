@@ -10,10 +10,11 @@ Use Case: Wake word will turn on camera, then a 4 digit code will need to be det
 
 <h1> Project Steps </h1>
 
-Project Broken into 5 Stages
+Project Broken into 6 Stages
 1.	[Training the Wake Word and Sign Language CNN’s](https://github.com/TC4451/Wake_word_sign_digits/blob/main/training/README.md)
 2.	Inference on the Raspberry PI
 3.	Optimization with Tensorflow Model Optimization Toolkit and Lite-RT
 4.	BNN implementation using Lyra
-5.	Synthesis with Yosys, Static Timing Analysis with OpenSTA
+5.	HLS4ML - Model to verilog Code
+6.	Synthesis with Yosys, Static Timing Analysis with OpenSTA
 
