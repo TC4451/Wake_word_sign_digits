@@ -15,6 +15,6 @@ Project Broken into 6 Stages
 2.	[Inference on the Raspberry PI](https://github.com/TC4451/Wake_word_sign_digits/blob/main/inference/README.md)
 3.	[Optimization with Tensorflow Model Optimization Toolkit and Lite-RT](https://github.com/TC4451/Wake_word_sign_digits/blob/main/optimization/README.md)
 4.	[BNN implementation using Lyra](https://github.com/TC4451/Wake_word_sign_digits/blob/main/BNN/README.md)
-5.	[HLS4ML - Model to verilog Code](https://github.com/TC4451/Wake_word_sign_digits/blob/main/HLS4ML/README.md)
+5.	[HLS4ML - Model to verilog Code](https://github.com/TC4451/https://github.com/TC4451/Wake_word_sign_digits/tree/main/hls4ml)
 6.	[Synthesis with Yosys, Static Timing Analysis with OpenSTA](https://github.com/TC4451/Wake_word_sign_digits/blob/main/syn_sta/README.md)
 
