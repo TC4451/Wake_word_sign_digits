@@ -308,3 +308,26 @@ Tensors of Subgraph#0
   Accuracy 92.6
 
   <h1>Clustering</h1>
+
+Clustering, or weight sharing, reduces the number of unique weight values in a model, leading to benefits for deployment. It first groups the weights of each layer into N clusters, then shares the cluster's centroid value for all the weights belonging to the cluster.
+
+This technique brings improvements via model compression. Future framework support can unlock memory footprint improvements that can make a crucial difference for deploying deep learning models on embedded systems with limited resources.
+
+All code can be found at  /Optimization/WW_cluster.py
+
+cluster_weights = tfmot.clustering.keras.cluster_weights
+
+CentroidInitialization = tfmot.clustering.keras.CentroidInitialization
+
+clustering_params = {
+
+  'number_of_clusters': 16,
+  
+  'cluster_centroids_init': CentroidInitialization.LINEAR
+  
+}
+
+Cluster a whole model
+
+clustered_model = cluster_weights(model, **clustering_params)
+
