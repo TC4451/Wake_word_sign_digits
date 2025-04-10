@@ -135,5 +135,106 @@ Tensors of Subgraph#0
 | Tflite – FP16 | 40.5K | 93.62% | 
 | Tflite- Int8-Int16 | 21.0K | 93.57% |
 
+<h1>Get started with TensorFlow model optimization</h1>
+
+The wake word model will now be optimized using the techniques found in the tensorflow model optimization guide located at [TensorFlow model optimization](https://www.tensorflow.org/model_optimization/guide)
+
+The toolkit supports post-training quantization, quantization aware training, pruning, and clustering. The toolkit also provides experimental support for collaborative optimization to combine various techniques.
+
+<h2>Pruning</h2>
+
+All code can be found at  /Optimization/WW_TFOptimization.py
+
+Apply pruning to the whole model. Start the model with 50% sparsity (50% zeros in weights) and end with 80% sparsity. Use the command
+
+pruning_params = {
+      'pruning_schedule': tfmot.sparsity.keras.PolynomialDecay(initial_sparsity=0.50,
+                                                               final_sparsity=0.80,
+                                                               begin_step=0,
+                                                               end_step=end_step)
+
+<h3>Results</h3>
+
+| Original    | Training params – 20226 (79.01KB)        |Accuracy – 96.1 |
+| -------- | -------- | -------- |
+| Layer Conv2d   | 320  |   |
+|Layer Conv2d_1  | 18496   |   |
+| Dense | 1410 | |
+
+| Pruned    | Training params non-zero – 4063 (16.2KB)          |Accuracy – 93,7 |
+| -------- | -------- | -------- |
+| Layer Conv2d   | 58 (non-zero weights) - 230 (zero weights) - 32 (non-zero biases) |   |
+|Layer Conv2d_1  | 3721 (non-zero weights) - 14711 (Zero Weights) - 64 (non-zero bias)|   |
+| Dense | 284 (non-zero weights)- 1124 (Zero Weights) - 2 (non-zero biases)| |
+
+<h2>Structural pruning of weights</h2>
+
+Structural pruning systematically zeroes out model weights at the beginning of the training process. Apply pruning to each layer
+
+All code can be found at  /Optimization/WW_TFOptimization_Structured_Pruning.
+
+Apply Pruning to each layer
+
+Model = keras.Sequential(
+    [
+        keras.Input(shape=[50,13,1]),  # Input shape (max_len, n_mfcc, 1) for 2D CNN
+        
+        #keras.layers.InputLayer(batch_input_shape=(None, 50, 13, 1)),
+        
+        prune_low_magnitude(
+        
+                keras.layers.Conv2D(
+                
+                    2, kernel_size=(3, 3), activation='relu',
+                    
+                    name="pruning_sparsity_0_5"),
+                    
+                **pruning_params_sparsity_0_5),
+                
+        #keras.layers.Conv2D(32, kernel_size=(3, 3), activation="relu"),
+        
+        keras.layers.MaxPooling2D(pool_size=(2, 2)),
+        
+        prune_low_magnitude(
+        
+                keras.layers.Conv2D(
+                
+                    64, kernel_size=(3, 3), activation="relu",
+                    
+                    name="structural_pruning"),
+                    
+                **pruning_params_2_by_4),
+                
+        #keras.layers.Conv2D(64, kernel_size=(3, 3), activation="relu"),
+        
+        keras.layers.MaxPooling2D(pool_size=(2, 2)),
+        
+        keras.layers.Flatten(),
+        
+        keras.layers.Dropout(0.5),  # Add dropout for regularization
+        
+        prune_low_magnitude(
+        
+                keras.layers.Dense(
+                
+                    2, activation="softmax",
+                    
+                    name="structural_pruning_dense"),
+                    
+                **pruning_params_2_by_4),
+                
+        #keras.layers.Dense(2, activation="softmax"),  # Output layer (softmax for multi-class)
+        
+
+Trainable params: 2646 (10.34 KB)
+
+![image](https://github.com/user-attachments/assets/251c97cc-9e35-42d8-afcd-11caf04b9f26)
+
+
+Training Accuracy = 92.8
+      
+Val Accuracy = 94.5
+
+
 
 
