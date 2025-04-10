@@ -8,7 +8,7 @@ For the wake word detector we used the Google Speech Command Dataset
 speech recognition, 2017. Available from
 [http://download.tensorflow.org/data/speech_commands_v0.01.tar.gz]{http://download.tensorflow.org/data/speech_commands_v0.01.tar.gz}"
 
-The Wake word used was “House”. The data set used to train the WakeWord CNN used 1750 1 sec .wav files of the word “House” and 1750 1 sec .wav files (combined) other various words (cat, dog, happy, Marvin, zero, etc),
+The Wake word used was “House”. The data set used to train the WakeWord CNN used 1750 one sec .wav files of the word “House” and 1750 one sec .wav files (combined) other various words (cat, dog, happy, Marvin, zero, etc),
 
 
 <h2><ins>Wake Word Training Code Location</ins></h2>
