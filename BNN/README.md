@@ -1,19 +1,20 @@
 <h1>Binary Neural Networks</h1>
 
-In this section of the project we will binarize the wake work.
+In this section of the project we will binarize the wake word neural network.
 
-Tutorial on BNN can be found here -->
+Tutorial's on BNN can be found here -->
 
 [Binary Neural Network Survey](https://arxiv.org/pdf/2004.03333)
+
 [Comprehensive review of BNN](https://arxiv.org/pdf/2110.06804)
 
 [Larq](https://docs.larq.dev/larq/) is an open-source Python library for training neural networks with extremely low-precision weights and activations, such as Binarized Neural Networks.
 
-One issue is the larq only works with older version of python
+One issue is that larq only works with older version of python. This is an excerpt from the documentation
 
 ![image](https://github.com/user-attachments/assets/8620398a-4837-4169-8482-29ab03221ade)
 
-For this project we use
+For this project found out we can use
 
 python version 3.10.16
 
@@ -31,13 +32,14 @@ For the wake word detector we used the same data as before (Google Speech Comman
 
 <h2>Binary Model</h2>
 
-All code can be found at [/bnn/wake_word_bnn.py]
+All code can be found at [/bnn/wake_word_bnn.py](https://github.com/TC4451/Wake_word_sign_digits/blob/main/BNN/wake_word_bnn.py)
 
-The non BNN for the Wake Word had the form of 
+
+The non-BNN for the Wake Word had the form of 
 
 ![image](https://github.com/user-attachments/assets/27a9f88c-af78-449e-bbfa-19e8f8a5ccac)
 
-We will keep these same number of layer. Therefore the BNN mode will be describe by
+We will keep these same number of layers. Therefore the BNN model will be described with the following syntax
 
 model = tf.keras.models.Sequential()
 
@@ -66,7 +68,9 @@ model.add(tf.keras.layers.BatchNormalization(scale=False))
 
 model.add(tf.keras.layers.Activation("softmax"))
 
-Lyrq output show a non BNN model of this structure would be 79.3K but the BNN is 3.22K
+<h2>Results</h2>
+
+Lyrq output shosw a non-BNN model of this structure would be 79.3K but the BNN is 3.22K
 
 ![image](https://github.com/user-attachments/assets/511d6f38-67c3-4c5b-a8c4-dbef0d80d533)
 
