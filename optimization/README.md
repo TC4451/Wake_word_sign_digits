@@ -147,7 +147,10 @@ The toolkit supports post-training quantization, quantization aware training, pr
 
 <h2>Pruning</h2>
 
-All code can be found at  /Optimization/WW_TFOptimization.py
+All code can be found at  [/Optimization/WW_TFOptimization.py](
+https://github.com/TC4451/Wake_word_sign_digits/blob/main/optimization/WW_TFOptimization.py)
+
+documentation at [tensorflow pruning](https://www.tensorflow.org/model_optimization/guide/pruning/comprehensive_guide)
 
 Apply pruning to the whole model. Start the model with 50% sparsity (50% zeros in weights) and end with 80% sparsity. Use the command
 
@@ -175,7 +178,9 @@ pruning_params = {
 
 Structural pruning systematically zeroes out model weights at the beginning of the training process. Apply pruning to each layer
 
-All code can be found at  /Optimization/WW_TFOptimization_Structured_Pruning.
+All code can be found at  [/Optimization/WW_TFOptimization_Structured_Pruning](https://github.com/TC4451/Wake_word_sign_digits/blob/main/optimization/TFOptim_Structure_Pruning.py)
+
+documentation at [tensor flow structural pruning](https://www.tensorflow.org/model_optimization/guide/pruning/pruning_with_sparsity_2_by_4)
 
 Apply Pruning to each layer
 
@@ -243,7 +248,9 @@ Val Accuracy = 94.5
 
 Apply quantize_model = tfmot.quantization.keras.quantize_model to the model.
 
-All code can be found at  /Optimization/WW_Qaunt_Aware.py
+All code can be found at  [/Optimization/WW_Qaunt_Aware.py](https://github.com/TC4451/Wake_word_sign_digits/blob/main/optimization/WW_Qaunt_Aware.py)
+
+documentation at [tensor flow quantization](https://www.tensorflow.org/model_optimization/guide/quantization/training_example)
 
 During training, quantize_layer inserts quantization and dequantization operations into the forward pass of the layer. 
 This simulates the effects of quantization (rounding and clamping) on the weights and activations, but the actual weights are still stored as floating-point numbers.   
@@ -317,7 +324,9 @@ Clustering, or weight sharing, reduces the number of unique weight values in a m
 
 This technique brings improvements via model compression. Future framework support can unlock memory footprint improvements that can make a crucial difference for deploying deep learning models on embedded systems with limited resources.
 
-All code can be found at  /Optimization/WW_cluster.py
+All code can be found at  [/Optimization/WW_cluster.py](https://github.com/TC4451/Wake_word_sign_digits/blob/main/optimization/WW_Cluster.py)
+
+documentation at [tensorflow clustering](https://www.tensorflow.org/model_optimization/guide/clustering/clustering_example)
 
 cluster_weights = tfmot.clustering.keras.cluster_weights
 
