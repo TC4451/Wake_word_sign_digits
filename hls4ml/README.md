@@ -14,7 +14,16 @@ After installation you need to source /tools/Xilinx/Vitis/2024.2/settings64.sh  
 
 A tutorial for HLS4ML can be found [here](https://github.com/fastmachinelearning/hls4ml-tutorial/blob/main/part1_getting_started.ipynb)
 
-Load model, setup input parameters, compile model, build model
+to get the tool to work with tensorflow we needed to load the dev version of hls4ml
+
+hls4ml version used --> 1.2.0.dev7+g887a17b8
+
+After that the flow was
+
+1. Load model
+2. setup input parameters
+3. compile model
+4.  build model
 
 config = hls4ml.utils.config_from_keras_model(model, granularity='model', backend='Vitis')
 
@@ -26,3 +35,9 @@ hls_model.compile()
 hls_model.build(csim=False)
 
 <h2>Results</h2>
+
+The tool did output many hierarchical verilog files. It converted FP32 into INT16 or 8 (confirm). Lowest level of the verilog just does this
+
+assign dout = $signed(din0) * $signed({din1});
+
+HLS4ML does not have support for BNN? I need XOR not MULT. I might need to write my own verilog code for the BNN layer.
