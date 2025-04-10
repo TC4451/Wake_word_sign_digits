@@ -344,3 +344,9 @@ Cluster a whole model
 
 clustered_model = cluster_weights(model, **clustering_params)
 
+<h1>To Do</h1>
+1) Replicate same outputs for Pruning/SP/Quan
+2) Get Cluster Model Working
+3) get zip file working???
+4) Try Collaborative Optimization
+5) Create a final table with all 5 or 6 model (size, accuracy, etc)
