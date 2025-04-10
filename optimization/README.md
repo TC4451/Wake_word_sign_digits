@@ -235,6 +235,76 @@ Training Accuracy = 92.8
       
 Val Accuracy = 94.5
 
+<h1>Quantization aware training</h1>
 
+Apply quantize_model = tfmot.quantization.keras.quantize_model to the model.
 
+All code can be found at  /Optimization/WW_Qaunt_Aware.py
 
+During training, quantize_layer inserts quantization and dequantization operations into the forward pass of the layer. 
+This simulates the effects of quantization (rounding and clamping) on the weights and activations, but the actual weights are still stored as floating-point numbers.   
+
+This allows the model to learn weights that are more robust to quantization.
+
+Convert this to a tensorflow lite model - converter.optimizations = [tf.lite.Optimize.DEFAULT]
+
+<h2>Results</h2>
+Subgraph#0 main(T#0) -> [T#16]
+
+  Op#0 QUANTIZE(T#0) -> [T#5]
+  
+  Op#1 CONV_2D(T#5, T#6, T#3[21, -2, -37, 22, 6, ...]) -> [T#7]
+  
+  Op#2 MAX_POOL_2D(T#7) -> [T#8]
+  
+  Op#3 CONV_2D(T#8, T#9, T#2[-190, -470, -463, -841, 22, ...]) -> [T#10]
+  
+  Op#4 MAX_POOL_2D(T#10) -> [T#11]
+  
+  Op#5 RESHAPE(T#11, T#1[-1, 704]) -> [T#12]
+  
+  Op#6 FULLY_CONNECTED(T#12, T#13, T#4[282, -282]) -> [T#14]
+  
+  Op#7 SOFTMAX(T#14) -> [T#15]
+  
+  Op#8 DEQUANTIZE(T#15) -> [T#16]
+
+Tensors of Subgraph#0
+  T#0(serving_default_input_1:0) shape_signature:[-1, 50, 13, 1], type:FLOAT32
+  
+  T#1(arith.constant) shape:[2], type:INT32 RO 8 bytes, buffer: 2, data:[-1, 704]
+  
+  T#2(tfl.pseudo_qconst) shape:[64], type:INT32 RO 256 bytes, buffer: 3, data:[-190, -470, -463, -841, 22, ...]
+  
+  T#3(tfl.pseudo_qconst1) shape:[32], type:INT32 RO 128 bytes, buffer: 4, data:[21, -2, -37, 22, 6, ...]
+  
+  T#4(tfl.pseudo_qconst2) shape:[2], type:INT32 RO 8 bytes, buffer: 5, data:[282, -282]
+  
+  T#5(sequential/quantize_layer/AllValuesQuantize/FakeQuantWithMinMaxVars;) shape_signature:[-1, 50, 13, 1], type:INT8
+  
+  T#6(sequential/quant_conv2d/Conv2D;sequential/quant_conv2d/LastValueQuant/FakeQuantWithMinMaxVarsPerChannel) shape:[32, 3, 3, 1], type:INT8 RO 288 bytes, buffer: 7, data:[., ., ., ., ., ...]
+  
+  T#7(sequential/quant_conv2d/Relu;sequential/quant_conv2d/BiasAdd;sequential/quant_conv2d/Conv2D;) shape_signature:[-1, 48, 11, 32], type:INT8
+  
+  T#8(sequential/quant_max_pooling2d/MaxPool) shape_signature:[-1, 24, 5, 32], type:INT8
+  
+  T#9(sequential/quant_conv2d_1/Conv2D;sequential/quant_conv2d_1/LastValueQuant/FakeQuantWithMinMaxVarsPerChannel) shape:[64, 3, 3, 32], type:INT8 RO 18432 bytes, buffer: 10, data:[., ., ., ., ., ...]
+  T#10(sequential/quant_conv2d_1/Relu;sequential/quant_conv2d_1/BiasAdd;sequential/quant_conv2d_1/Conv2D;sequential/quant_conv2d_1/BiasAdd/ReadVariableOp) shape_signature:[-1, 22, 3, 64], type:INT8
+  
+  T#11(sequential/quant_max_pooling2d_1/MaxPool) shape_signature:[-1, 11, 1, 64], type:INT8
+  
+  T#12(sequential/quant_flatten/Reshape) shape_signature:[-1, 704], type:INT8
+  
+  T#13(sequential/quant_dense/MatMul;sequential/quant_dense/LastValueQuant/FakeQuantWithMinMaxVars) shape:[2, 704], type:INT8 RO 1408 bytes, buffer: 14, data:[., L, ., ., ., ...]
+  
+  T#14(sequential/quant_dense/MatMul;sequential/quant_dense/BiasAdd) shape_signature:[-1, 2], type:INT8
+  
+  T#15(sequential/quant_dense/Softmax) shape_signature:[-1, 2], type:INT8
+  
+  T#16(StatefulPartitionedCall:0) shape_signature:[-1, 2], type:FLOAT32
+
+  Model Size 20.6K
+
+  Accuracy 92.6
+
+  <h1>Clustering</h1>
