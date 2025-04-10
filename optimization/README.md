@@ -67,6 +67,8 @@ This severly reduced accuracy
 
 This sets the model to use FP16 instead of FP32
 
+documentation --> [Post-training float 16 quantization](https://ai.google.dev/edge/litert/models/post_training_float16_quant)
+
 converter.target_spec.supported_types = [tf.float16]
 
 | Model    | Size     | Accuracy |
@@ -77,6 +79,8 @@ converter.target_spec.supported_types = [tf.float16]
 | Tflite – FP16 | 40.5K | 93.62% | 
 
 <h2>Post-training integer quantization with int16 activations</h2>
+
+documentation --> [Post-training int quantization with in16 activations](https://ai.google.dev/edge/litert/models/post_training_integer_quant_16x8)
 
 command used --> converter.target_spec.supported_ops = [tf.lite.OpsSet.EXPERIMENTAL_TFLITE_BUILTINS_ACTIVATIONS_INT16_WEIGHTS_INT8]
 
