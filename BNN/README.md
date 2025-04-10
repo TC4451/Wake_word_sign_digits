@@ -9,14 +9,16 @@ Tutorial on BNN can be found here -->
 
 [Larq](https://docs.larq.dev/larq/) is an open-source Python library for training neural networks with extremely low-precision weights and activations, such as Binarized Neural Networks.
 
-One issue is the larg only works with older version of python
+One issue is the larq only works with older version of python
 
 ![image](https://github.com/user-attachments/assets/8620398a-4837-4169-8482-29ab03221ade)
 
 For this project we use
 
 python version 3.10.16
+
 larq 13.3
+
 tensorflow 2.10
 
 We will follow the tutorial flow provided in the [LARQ documentation](https://docs.larq.dev/larq/tutorials/binarynet_cifar10/)
@@ -29,5 +31,56 @@ For the wake word detector we used the same data as before (Google Speech Comman
 
 <h2>Binary Model</h2>
 
+All code can be found at [/bnn/wake_word_bnn.py]
+
+The non BNN for the Wake Word had the form of 
+
+![image](https://github.com/user-attachments/assets/27a9f88c-af78-449e-bbfa-19e8f8a5ccac)
+
+We will keep these same number of layer. Therefore the BNN mode will be describe by
+
+model = tf.keras.models.Sequential()
 
 
+model.add(lq.layers.QuantConv2D(32, (3, 3),
+                                kernel_quantizer="ste_sign",
+                                kernel_constraint="weight_clip",
+                                use_bias=False,
+                                input_shape=(50,13,1)))
+                                
+model.add(tf.keras.layers.MaxPooling2D((2, 2)))
+
+model.add(tf.keras.layers.BatchNormalization(scale=False))
+
+model.add(lq.layers.QuantConv2D(64, (3, 3), use_bias=False, **kwargs))
+
+model.add(tf.keras.layers.MaxPooling2D((2, 2)))
+
+model.add(tf.keras.layers.BatchNormalization(scale=False))
+
+model.add(tf.keras.layers.Flatten())
+
+model.add(lq.layers.QuantDense(2, use_bias=False, **kwargs))
+
+model.add(tf.keras.layers.BatchNormalization(scale=False))
+
+model.add(tf.keras.layers.Activation("softmax"))
+
+Lyrq output show a non BNN model of this structure would be 79.3K but the BNN is 3.22K
+
+![image](https://github.com/user-attachments/assets/511d6f38-67c3-4c5b-a8c4-dbef0d80d533)
+
+The BNN is not a 100% BNN. To maintain accuracy the input, output, and batch normalization layers are FP32.
+
+![image](https://github.com/user-attachments/assets/3b28994c-c95e-413e-bcbb-8652784472a7)
+
+After training of 5 epoch this model has an accuracy of 95.3%
+
+<h1>To Do</h1>
+This is an old version of Tensorflow. It is want to do something I need to output the weights and load them into a model that is built with latest version of TF.
+I would like to plot the weight. Here are the weights
+
+![image](https://github.com/user-attachments/assets/75f9c1a2-450e-4f73-b457-d1dcb8a115d6)
+
+but I would like to plot them.
+How do I get this old version model into a new model to run HLS4ML on.
