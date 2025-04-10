@@ -42,7 +42,7 @@ CNN Summary
 
 ![image](https://github.com/user-attachments/assets/1a375578-f641-46ad-a32d-725e0037d089)
 
-<h2><ins>Wakw Word Results</ins></h2>
+<h2><ins>Wake Word Results</ins></h2>
 
 ![image](https://github.com/user-attachments/assets/eb86e3fa-71d0-4d69-bafb-38252161a7fc)
 
