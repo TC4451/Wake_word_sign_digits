@@ -85,14 +85,23 @@ documentation --> [Post-training int quantization with in16 activations](https:/
 command used --> converter.target_spec.supported_ops = [tf.lite.OpsSet.EXPERIMENTAL_TFLITE_BUILTINS_ACTIVATIONS_INT16_WEIGHTS_INT8]
 
 Subgraph#0 main(T#15) -> [T#16]
+
   Op#0 QUANTIZE(T#15) -> [T#0]
+  
   Op#1 CONV_2D(T#0, T#6, T#7) -> [T#8]
+  
   Op#2 MAX_POOL_2D(T#8) -> [T#9]
+  
   Op#3 CONV_2D(T#9, T#2, T#1) -> [T#10]
+  
   Op#4 MAX_POOL_2D(T#10) -> [T#11]
+  
   Op#5 RESHAPE(T#11, T#5[-1, 704]) -> [T#12]
+  
   Op#6 FULLY_CONNECTED(T#12, T#3, T#4) -> [T#13]
+  
   Op#7 SOFTMAX(T#13) -> [T#14]
+  
   Op#8 DEQUANTIZE(T#14) -> [T#16]
 
 Tensors of Subgraph#0
