@@ -20,7 +20,7 @@ git clone --depth=1 https://github.com/iic-jku/iic-osic-tools.git
 
 ./start_shell.sh
 
-<h2>Yosys<h2>
+<h2>Yosys<\h2>
 
 Read verilog
 
