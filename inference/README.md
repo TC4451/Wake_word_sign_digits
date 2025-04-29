@@ -14,7 +14,11 @@ LAFVIN Kit (4 Digit 7-segment Display, LCD, LED’s, etc)
 
 <h2>Lite RT Optimization Code</h2>
 
-All code can be found in [Whole System.py](https://github.com/TC4451/Wake_word_sign_digits/blob/main/inference/Whole%20System.py)
+All code can be found in [Whole System.py](https://github.com/TC4451/Wake_word_sign_digits/blob/main/inference/Whole%20System.py) , 
+[capture_images.py](https://github.com/TC4451/Wake_word_sign_digits/blob/main/inference/capture_images.py), 
+[image_results.py](https://github.com/TC4451/Wake_word_sign_digits/blob/main/inference/Image_results.py), 
+[LCD.py](https://github.com/TC4451/Wake_word_sign_digits/blob/main/inference/LCD.py
+
 
 <h2>Process and Results</h2>
 
