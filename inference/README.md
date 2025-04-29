@@ -46,6 +46,18 @@ All code can be found in [Whole System.py](https://github.com/TC4451/Wake_word_s
 
 The Wake Word Model is 79K. THe following code was written to determine the speed in ms and the power used on the Raspberry Pi in mw.
 
+Code Used --> [ww_metrics.py](https://github.com/TC4451/Wake_word_sign_digits/blob/main/inference/ww_metrics.py)
+
+1. Convert a wav file to MFCC for inference
+2. start_time
+3. run inference on the wake_word
+4. end time
+5. repeat #2-4 fifty times
+6. print out Average Time
+7. Monitor the Power Meter
+
+   
+
 
 
 
