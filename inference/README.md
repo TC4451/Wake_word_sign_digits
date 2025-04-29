@@ -36,38 +36,18 @@ All code can be found in [Whole System.py](https://github.com/TC4451/Wake_word_s
 
 <h2></h2> Detailed Wake Word Inference Process </h2>
 
-Audio Recording & Buffering​
+![image](https://github.com/user-attachments/assets/f0219675-0c6d-4fc2-8397-ee54eafc5e79)
 
-Open a continuous audio stream at 22050 Hz.​
+<h2> Detailed Sign Language Inference Process </h2>
 
-Capture mono audio data via a callback.​
+![image](https://github.com/user-attachments/assets/85e50d53-2d9d-4523-9917-0e9a620941a7)
 
-Append samples to a ring buffer (deque) with thread-safety using a lock.​
+<h2> Results </h2>
 
-Audio Preprocessing​
+The Wake Word Model is 79K. THe following code was written to determine the speed in ms and the power used on the Raspberry Pi in mw.
 
-Use a 1-second audio window that updates every 0.5 seconds.​
 
-Normalize audio and extract MFCC features with librosa.​
 
-Pad and reshape MFCCs for consistent model input.​
 
-Inference Process​
-
-Feed preprocessed MFCC data into the TFLite model.​
-
-Retrieve prediction probabilities for wake word detection.​
-
-Trigger a wake word detection alert if probability exceeds 0.9.​
-
-Continuous Monitoring​
-
-Run inference every 0.5 seconds in a loop.​
-
-Ensure smooth and real-time detection with overlapping audio windows.​
-
-Concurrency Considerations​
-
-Use a lock to synchronize audio buffering and processing.
 
 
