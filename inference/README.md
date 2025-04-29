@@ -34,7 +34,7 @@ All code can be found in [Whole System.py](https://github.com/TC4451/Wake_word_s
 9. if incorrect stay in locked state - return to #2
 
 
-<h2 Detailed Wake Word Inference Process </h2>
+<h2></h2> Detailed Wake Word Inference Process </h2>
 
 Audio Recording & Buffering​
 
