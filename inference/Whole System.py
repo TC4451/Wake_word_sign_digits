@@ -71,7 +71,7 @@ def predict_wake_word():
     print("Predictions:", predictions)
     print(predictions[0, 1])
 
-    if predictions[0, 1] > 0.1:
+    if predictions[0, 1] > 0.95:
         print(">>> Wake word detected! <<<")
       # time.sleep(1)
         return True # Return True if the condition is met.
