@@ -16,12 +16,13 @@ model.add(lq.layers.QuantConv2D(32, (3, 3),
                                 input_shape=(50,13,1)))
 model.add(tf.keras.layers.MaxPooling2D((2, 2)))
 model.add(tf.keras.layers.BatchNormalization(scale=False))
-#model.add(lq.layers.QuantConv2D(64, (3, 3), use_bias=False, **kwargs))
-#model.add(tf.keras.layers.BatchNormalization(scale=False))
+
+model.add(lq.layers.QuantConv2D(64, (3, 3), use_bias=False, **kwargs))
+model.add(tf.keras.layers.MaxPooling2D((2, 2)))
+model.add(tf.keras.layers.BatchNormalization(scale=False))
+
 model.add(tf.keras.layers.Flatten())
 
-#model.add(lq.layers.QuantDense(64, use_bias=False, **kwargs))
-#model.add(tf.keras.layers.BatchNormalization(scale=False))
 model.add(lq.layers.QuantDense(2, use_bias=False, **kwargs))
 model.add(tf.keras.layers.BatchNormalization(scale=False))
 model.add(tf.keras.layers.Activation("softmax"))
