@@ -86,11 +86,8 @@ If I could change the kernel from 3x3 to 2x2, I would save many 1-bit MACs'. Bel
 
 Accuracy - 93.2%
 
-<h1>To Do</h1>
-This is an old version of Tensorflow. It is want to do something I need to output the weights and load them into a model that is built with latest version of TF.
-I would like to plot the weight. Here are the weights
+You can see some of the weigtht of the model.add(lq.layers.QuantConv2D(64, (3, 3), use_bias=False, **kwargs)) layer
+
 
 ![image](https://github.com/user-attachments/assets/75f9c1a2-450e-4f73-b457-d1dcb8a115d6)
 
-but I would like to plot them.
-How do I get this old version model into a new model to run HLS4ML on.
