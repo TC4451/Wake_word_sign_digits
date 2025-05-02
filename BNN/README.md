@@ -59,7 +59,7 @@ model.add(lq.layers.QuantConv2D(64, (3, 3), use_bias=False, **kwargs))
 model.add(tf.keras.layers.MaxPooling2D((2, 2)))
 
 model.add(tf.keras.layers.BatchNormalization(scale=False))
-
+93
 model.add(tf.keras.layers.Flatten())
 
 model.add(lq.layers.QuantDense(2, use_bias=False, **kwargs))
@@ -79,6 +79,12 @@ The BNN is not a 100% BNN. To maintain accuracy the input, output, and batch nor
 ![image](https://github.com/user-attachments/assets/3b28994c-c95e-413e-bcbb-8652784472a7)
 
 After training of 5 epoch this model has an accuracy of 95.3%
+
+If I could change the kernel from 3x3 to 2x2, I would save many 1-bit MACs'. Below are the results.
+
+![image](https://github.com/user-attachments/assets/1beb64f1-cada-4e04-8597-43d10286bd08)
+
+Accuracy - 93.2%
 
 <h1>To Do</h1>
 This is an old version of Tensorflow. It is want to do something I need to output the weights and load them into a model that is built with latest version of TF.
