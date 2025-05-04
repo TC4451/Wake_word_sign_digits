@@ -88,10 +88,8 @@ def print_tflite_weights(tflite_file):
         print(f"An error occurred: {e}")
 
 
-# Example usages:
-# Replace 'your_model.tflite' with the actual path to your TFLite model file
+# Example usages: Replace 'your_model.tflite' with the actual path to your TFLite model file
 plot_tflite_weight_distribution('wake_word_dr_quantized.tflite')
 
-# Replace 'your_model.tflite' with the actual path to your TFLite model file
 print_tflite_weights('wake_word_dr_quantized.tflite')
 tf.lite.experimental.Analyzer.analyze(model_content="wake_word_dr_quantized.tflite")
