@@ -13,15 +13,12 @@ import Image_results
 interpreter = tf.lite.Interpreter(model_path="./wake_word.tflite")
 interpreter.allocate_tensors()
 
-# Get input and output tensors.
 input_details = interpreter.get_input_details()
 output_details = interpreter.get_output_details()
 
 print(input_details)
 print(output_details)
 
-
-# params
 fs = 22050
 seconds = 1
 n_mfcc = 13
@@ -74,19 +71,19 @@ def predict_wake_word():
     if predictions[0, 1] > 0.95:
         print(">>> Wake word detected! <<<")
       # time.sleep(1)
-        return True # Return True if the condition is met.
+        return True
     else:
-        return False # Return False if the condition is not met.
+        return False
 
 
+# Initialize the LCD with specific parameters: Raspberry Pi revision, I2C address, and backlight status
 def main_loop():
-    # Initialize the LCD with specific parameters: Raspberry Pi revision, I2C address, and backlight status
     lcd = LCD(2, 0x27, True)
     lcd.message("Locked", 1)
     while True:
         if predict_wake_word():
             break
-        # Tiny sleep to prevent CPU overload
+            
         time.sleep(0.1)
     lcd.message("Enter Code", 1)
     capture_images.capture_images()
@@ -95,8 +92,6 @@ def main_loop():
     if entered_code == [1, 2, 1, 2]:
         lcd.message("Unlocked", 1)
         
-    
-    
 # 
 if __name__ == "__main__":
     main_loop()
