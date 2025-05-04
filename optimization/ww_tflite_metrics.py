@@ -2,15 +2,8 @@ import tensorflow as tf
 import numpy as np
 import matplotlib.pyplot as plt
 
+# Plots histogram(s) of weight values
 def plot_tflite_weight_distribution(tflite_file, bins=256, count_nonzero_only=False):
-    """
-    Plots the distribution of weights in a TensorFlow Lite model.
-
-    Args:
-        tflite_file: Path to the TFLite model file.
-        bins: Number of bins for the histogram.
-        count_nonzero_only: If True, only plots the distribution of non-zero weights.
-    """
     try:
         interpreter = tf.lite.Interpreter(model_path=tflite_file)
         interpreter.allocate_tensors()
@@ -64,6 +57,7 @@ def plot_tflite_weight_distribution(tflite_file, bins=256, count_nonzero_only=Fa
 import tensorflow as tf
 import numpy as np
 
+# Prints weight tensors
 def print_tflite_weights(tflite_file):
     """
     Prints the actual weights of a TensorFlow Lite model to the screen.
@@ -93,16 +87,11 @@ def print_tflite_weights(tflite_file):
     except Exception as e:
         print(f"An error occurred: {e}")
 
-# Example Usage:
 
-
-# Example Usage:
+# Example usages:
 # Replace 'your_model.tflite' with the actual path to your TFLite model file
 plot_tflite_weight_distribution('wake_word_dr_quantized.tflite')
 
-# Example Usage:
 # Replace 'your_model.tflite' with the actual path to your TFLite model file
 print_tflite_weights('wake_word_dr_quantized.tflite')
 tf.lite.experimental.Analyzer.analyze(model_content="wake_word_dr_quantized.tflite")
-
-
