@@ -38,29 +38,24 @@ model.fit(X_train, y_train, batch_size=64, epochs=5)
 model.summary()
 lq.models.summary(model)
 
+# Prints the model weights
 def print_larq_model_weights(model):
-    """
-    Prints the weights of a Larq BNN model.
-
-    Args:
-        model: A Larq BNN model (tf.keras.Model).
-    """
     for layer in model.layers:
-        if hasattr(layer, "weights"):  # Check if the layer has weights
+        if hasattr(layer, "weights"):
             print(f"Layer: {layer.name}")
             for weight in layer.weights:
                 print(f"  Weight: {weight.name}")
                 print(f"    Shape: {weight.shape}")
-                print(f"    Value: {weight.numpy()}") #get the numpy value
-                if "quantizer" in weight.name: #check if it's a quantized weight.
-                    print(f"    Quantizer: {layer.get_quantizers()}") # print the quantizers.
+                print(f"    Value: {weight.numpy()}")
+                if "quantizer" in weight.name:
+                    print(f"    Quantizer: {layer.get_quantizers()}")
                 print("-" * 20)
 
 #print_larq_model_weights(model)
-model.save("wake_word_precision_model.h5")  # save full precision latent weights
-fp_weights = model.get_weights()  # get latent weights
+model.save("wake_word_precision_model.h5")
+fp_weights = model.get_weights()
 
 with lq.context.quantized_scope(True):
-    model.save("wake_word.binary_model.h5")  # save binary weights
-    weights = model.get_weights()  # get binary weights]
+    model.save("wake_word.binary_model.h5")
+    weights = model.get_weights()
     print(weights)
