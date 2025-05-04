@@ -11,9 +11,8 @@ from tensorflow.keras.preprocessing.sequence import pad_sequences
 from sklearn.preprocessing import LabelEncoder
 from sklearn.model_selection import train_test_split
 import random
-
-
 #from tensorflow.keras import layers
+
 random.seed(0)
 np.random.seed(0)
 
@@ -25,7 +24,7 @@ val_split = 0.1
 
 model = keras.Sequential(
     [
-        keras.Input(shape=[50,13,1]),  # Input shape (max_len, n_mfcc, 1) for 2D CNN
+        keras.Input(shape=[50,13,1]),
         #keras.layers.InputLayer(batch_input_shape=(None, 50, 13, 1)),
         keras.layers.Conv2D(32, kernel_size=(3, 3), activation="relu"),
         keras.layers.MaxPooling2D(pool_size=(2, 2)),
