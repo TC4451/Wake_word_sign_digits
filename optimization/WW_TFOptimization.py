@@ -4,7 +4,6 @@ import tensorflow_model_optimization as tfmot
 import numpy as np
 import tempfile
 import os
-
 from tensorflow_model_optimization.python.core.keras.compat import keras
 import WW_Metrics as wwm
 import matplotlib.pyplot as plt
@@ -18,11 +17,12 @@ import random
 random.seed(0)
 np.random.seed(0)
 
-# Compute end step to finish pruning after 2 epochs.
-batch_size = 128
-numerical_labels = 2
+# Basic training setup
+initial_batch_size = 128
+num_classes = 2
 epochs = 4
-validation_split = 0.1 # 10% of training set will be used for validation set.
+val_split = 0.1
+
 model = keras.Sequential(
     [
         keras.Input(shape=[50,13,1]),  # Input shape (max_len, n_mfcc, 1) for 2D CNN
@@ -32,26 +32,32 @@ model = keras.Sequential(
         keras.layers.Conv2D(64, kernel_size=(3, 3), activation="relu"),
         keras.layers.MaxPooling2D(pool_size=(2, 2)),
         keras.layers.Flatten(),
-        keras.layers.Dropout(0.5),  # Add dropout for regularization
-        keras.layers.Dense(2, activation="softmax"),  # Output layer (softmax for multi-class)
+        keras.layers.Dropout(0.5),
+        keras.layers.Dense(2, activation="softmax"),
     ]
 )
-print(type(model))
+
+print(f"Model type: {type(model)}")
+
+# Load input data
 padded_features = np.load('padded_features.npy')
 print(f"The size of padded_labels is: {padded_features.size}")
-numerical_labels = np.load('numerical_labels.npy')
-print(f"The size of numerical_labels is: {numerical_labels.size}")
+num_classes = np.load('num_classes.npy')
+print(f"The size of num_classes is: {num_classes.size}")
 
 X_train, X_val, y_train, y_val = train_test_split(
-    padded_features, numerical_labels, test_size=0.2, random_state=42)
+    padded_features, num_classes, test_size=0.2, random_state=42)
 
 model.summary()
 
+# Compile and train the model
 model.compile(loss="sparse_categorical_crossentropy", optimizer="adam", metrics=["accuracy"])
-epochs = 12
+training_epochs = 12
 batch_size = 32
 
-history = model.fit(X_train, y_train, batch_size=batch_size, epochs=epochs, validation_data=(X_val, y_val))
+history = model.fit(X_train, y_train, batch_size=batch_size, epochs=training_epochs, validation_data=(X_val, y_val))
+
+# Evaluate on validation data
 loss, accuracy = model.evaluate(X_val, y_val, verbose=0)
 print("Validation Loss:", loss)
 print("Validation Accuracy:", accuracy)
@@ -72,13 +78,14 @@ plt.show()
 
 #model.save("wake_word_model.keras")
 
+# Pruning
 prune_low_magnitude = tfmot.sparsity.keras.prune_low_magnitude
 
 #batch_size = 128
-epochs = 5
+pruning_epochs = 5
 
-num_images = padded_features.shape[0] * (1 - validation_split)
-end_step = np.ceil(num_images / batch_size).astype(np.int32) * epochs
+num_images = padded_features.shape[0] * (1 - val_split)
+end_step = np.ceil(num_images / batch_size).astype(np.int32) * pruning_epochs
 
 # Define model for pruning.
 pruning_params = {
@@ -87,25 +94,31 @@ pruning_params = {
                                                                begin_step=0,
                                                                end_step=end_step)
 }
+
+# Wrap the model with pruning
 model_for_pruning = prune_low_magnitude(model, **pruning_params)
 
-# `prune_low_magnitude` requires a recompile.
-model_for_pruning.compile(optimizer='adam',
-              loss=keras.losses.SparseCategoricalCrossentropy(from_logits=True),
-              metrics=['accuracy'])
+# Recompile the pruned model
+model_for_pruning.compile(
+    optimizer='adam',
+    loss=keras.losses.SparseCategoricalCrossentropy(from_logits=True),
+    metrics=['accuracy'])
 
 model_for_pruning.summary()
 
-logdir = tempfile.mkdtemp()
-
+# Setup pruning callbacks
+log_dir = tempfile.mkdtemp()
 callbacks = [
   tfmot.sparsity.keras.UpdatePruningStep(),
-  tfmot.sparsity.keras.PruningSummaries(log_dir=logdir),
+  tfmot.sparsity.keras.PruningSummaries(log_dir=log_dir),
 ]
 
-model_for_pruning.fit(padded_features, numerical_labels,
-                  batch_size=batch_size, epochs=epochs, validation_split=validation_split,
-                  callbacks=callbacks)
+model_for_pruning.fit(
+    padded_features, num_classes,
+    batch_size=batch_size,
+    epochs=pruning_epochs,
+    val_split=val_split,
+    callbacks=callbacks)
 
 wwm.print_cnn_weights(model_for_pruning)
 
