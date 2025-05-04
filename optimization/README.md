@@ -257,7 +257,7 @@ Val Accuracy = 94.5
 
 Apply quantize_model = tfmot.quantization.keras.quantize_model to the model.
 
-All code can be found at  [/Optimization/WW_Qaunt_Aware.py](https://github.com/TC4451/Wake_word_sign_digits/blob/main/optimization/WW_Qaunt_Aware.py)
+All code can be found at  [/Optimization/WW_Quant_Aware.py](https://github.com/TC4451/Wake_word_sign_digits/blob/main/optimization/WW_Qaunt_Aware.py)
 
 documentation at [tensor flow quantization](https://www.tensorflow.org/model_optimization/guide/quantization/training_example)
 
