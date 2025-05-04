@@ -3,51 +3,44 @@ import time
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
-
 import tensorflow as tf
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Conv2D, MaxPooling2D, Flatten, Dense, Dropout
 
-
-my_seed = 42
-split_proportion = 0.1
+random_seed = 42
+val_split = 0.1
 batch_size = 4
-number_epochs = 10
+num_epochs = 10
 lr = 3e-5
-
-figure_count = 0
-#figure_dir = os.path.join("..", "Dataset")
-#if not os.path.exists(figure_dir):
-#    os.mkdir(figure_dir)
-
 train_new = True
 
-print(f"Number of GPUs Available: {len(tf.config.list_physical_devices('GPU'))}")
+print(f"GPUs available: {len(tf.config.list_physical_devices('GPU'))}")
 
-input_dir = "../Dataset/Sign_language/"
+dataset_path = "../Dataset/Sign_language/"
+x_path = os.path.join(dataset_path, "X.npy")
+y_path = os.path.join(dataset_path, "Y.npy")
 
-x_filename = os.path.join(input_dir, "X.npy")
-y_filename = os.path.join(input_dir, "Y.npy")
+x = np.load(x_path)
+y = np.load(y_path)
 
-print(x_filename)
-x = np.load(x_filename)
-y = np.load(y_filename)
+# Shuffle data and labels
+np.random.seed(random_seed)
+indices = np.arange(len(x))
+np.random.shuffle(indices)
+x = x[indices]
+y = y[indices]
 
-# Shuffle and split the data
-split_number = int(split_proportion * x.shape[0])
-
-np.random.seed(my_seed)
-np.random.shuffle(x)
+# Split dataset
+split_number = int(val_split * x.shape[0])
 val_x = tf.convert_to_tensor(x[:split_number])
 test_x = tf.convert_to_tensor(x[split_number:2 * split_number])
 train_x = tf.convert_to_tensor(x[2 * split_number:])
 
-np.random.seed(my_seed)
-np.random.shuffle(y)
 val_y_labels = tf.convert_to_tensor(y[:split_number])
 test_y_labels = tf.convert_to_tensor(y[split_number:2 * split_number])
 train_y_labels = tf.convert_to_tensor(y[2 * split_number:])
 
+# Label mapping
 label_dict = {}
 for number, label in enumerate(np.unique(train_y_labels)):
     label_dict[number] = label
@@ -71,30 +64,30 @@ for ii in range(np_val_y.shape[0]):
 for ii in range(np_test_y.shape[0]):
     np_test_y[ii] = reverse_label_dict[test_y_labels[ii].numpy()[0]]
 
+# Convert string labels to numerical indices
 train_y = tf.convert_to_tensor(np_train_y.reshape(-1), dtype=tf.int32)
 val_y = tf.convert_to_tensor(np_val_y.reshape(-1), dtype=tf.int32)
 test_y = tf.convert_to_tensor(np_test_y.reshape(-1), dtype=tf.int32)
 
-number_classes = len(label_dict.keys())
+num_classes = len(label_dict.keys())
+input_shape = train_x.shape[1:]   # (height, width, channels)
 
-input_shape = train_x.shape[1:]  # (height, width, channels)
-
-
+# CNN model
 model = Sequential([
-    Conv2D(32, (3, 3), activation='relu', input_shape=input_shape, padding='same'),  # Start with a convolutional layer
-    MaxPooling2D((2, 2)),  # Pooling to reduce spatial dimensions
-    Conv2D(64, (3, 3), activation='relu', padding='same'),  # Another convolutional layer
-    MaxPooling2D((2, 2)),  # Another pooling layer
-    Conv2D(128, (3, 3), activation='relu', padding='same'),  # Convolutional layer
-    MaxPooling2D((2, 2)), # Pooling layer
-    Flatten(),  # Flatten before dense layers
-    Dropout(0.25),  # Dropout for regularization
-    Dense(32, activation='relu'),  # Dense layers
+    Conv2D(32, (3, 3), activation='relu', input_shape=input_shape, padding='same'),
+    MaxPooling2D((2, 2)),
+    Conv2D(64, (3, 3), activation='relu', padding='same'),
+    MaxPooling2D((2, 2)),
+    Conv2D(128, (3, 3), activation='relu', padding='same'),
+    MaxPooling2D((2, 2)), 
+    Flatten(),
+    Dropout(0.25),
     Dense(32, activation='relu'),
-    Dense(number_classes, activation='softmax')  # Output layer
+    Dense(32, activation='relu'),
+    Dense(num_classes, activation='softmax')
 ])
 
-# Warm up the model by making an initial forward pass
+# Prime the model
 _ = model(train_x[0:1])
 model.summary()
 
@@ -104,8 +97,8 @@ model.compile(
     metrics=['accuracy']
 )
 
-
-def make_scheduler(my_lr):
+# Learning rate adjustment function
+def lr_schedule(my_lr):
     def scheduler(epoch, lr):
         if epoch <= 1:
             return my_lr / 10.0
@@ -113,9 +106,7 @@ def make_scheduler(my_lr):
             return my_lr * 10.0
         else:
             return lr * 0.9
-
     return scheduler
-
 
 tensorboard_callback = tf.keras.callbacks.TensorBoard(
     log_dir="logs",
@@ -123,34 +114,33 @@ tensorboard_callback = tf.keras.callbacks.TensorBoard(
     update_freq='epoch',
 )
 
-scheduler = make_scheduler(lr)
+scheduler = lr_schedule(lr)
 lr_scheduler_callback = tf.keras.callbacks.LearningRateScheduler(scheduler)
 
-# save_model_dir = os.path.join(".", "mobilenet_sign.keras")
-save_model_dir = "sign_language_try.keras"
-tf_lite_model_filename = os.path.join(".", "sign_language.tflite")
+save_path = "sign_language_try.keras"
+tflite_path = os.path.join(".", "sign_language.tflite")
 
 if train_new:
+    # Training loop
     history = model.fit(
         x=train_x,
         y=train_y,
         validation_data=(val_x, val_y),
         batch_size=batch_size,
-        epochs=number_epochs,
+        epochs=num_epochs,
         callbacks=[tensorboard_callback, lr_scheduler_callback]
     )
 
-    # ---- SAVE THE MODEL AFTER TRAINING ----
-    model.save(save_model_dir)
-    print(f"Model saved to {save_model_dir}")
+    model.save(save_path)
+    print(f"Model saved to {save_path}")
 
-    loaded_model = tf.keras.models.load_model("sign_language_try.keras")
-
+    # Export to TensorFlow Lite
+    loaded_model = tf.keras.models.load_model(save_path)
     converter = tf.lite.TFLiteConverter.from_keras_model(loaded_model)
     tflite_model = converter.convert()
-    open("./sign_language.tflite", "wb").write(tflite_model)
-    print("Tensorflow Lite Model Saved")
+    open(tflite_path, "wb").write(tflite_model)
+    print("Tensorflow Lite Model Saved to {tflite_path}")
 
 else:
-    model = tf.keras.models.load_model(save_model_dir)
-    print(f"Model loaded from {save_model_dir}")
+    model = tf.keras.models.load_model(save_path)
+    print(f"Model loaded from {save_path}")
