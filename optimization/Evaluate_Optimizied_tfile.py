@@ -1,4 +1,3 @@
-
 input_data = padded_features[:]
 expected_output = numerical_labels[:]
 
@@ -7,17 +6,15 @@ total_predictions = len(input_data)
 
 for i in range(total_predictions):
     # Set the input tensor
-    input_tensor = input_data[i:i+1].astype(input_details[0]['dtype']) #ensure correct dtype
+    input_tensor = input_data[i:i+1].astype(input_details[0]['dtype'])
     interpreter.set_tensor(input_details[0]['index'], input_tensor)
 
     # Run inference
     interpreter.invoke()
 
-    # Get the output tensor
     output_tensor = interpreter.get_tensor(output_details[0]['index'])
-    predicted_label = np.argmax(output_tensor) #get the index of the largest value
+    predicted_label = np.argmax(output_tensor)
 
-    # Compare with the expected output
     if predicted_label == expected_output[i]:
         correct_predictions += 1
 
