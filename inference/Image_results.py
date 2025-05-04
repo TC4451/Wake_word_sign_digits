@@ -6,7 +6,7 @@ import time
 from LCD import LCD
 
 def load_sl_model():
-    tflite_model_path = "./sign_language.tflite"  # Replace with your .tflite path
+    tflite_model_path = "./sign_language.tflite"
     interpreter = tf.lite.Interpreter(model_path=tflite_model_path)
     interpreter.allocate_tensors()
 
@@ -60,6 +60,4 @@ def load_sl_model():
         #predicted_labels_string += predicted_label + ", "
         #lcd.message(predicted_labels_string, 1)
         
-
     return predicted_labels
-    
