@@ -4,15 +4,16 @@ import time
 class LCD:
     def __init__(self, pi_rev = 2, i2c_addr = 0x3F, backlight = True):
 
-        # device constants
+        # Device constants
         self.I2C_ADDR  = i2c_addr
-        self.LCD_WIDTH = 16   # Max. characters per line
+        self.LCD_WIDTH = 16   # Max characters per line
 
-        self.LCD_CHR = 1 # Mode - Sending data
-        self.LCD_CMD = 0 # Mode - Sending command
+        self.LCD_CHR = 1   # Mode - Sending data
+        self.LCD_CMD = 0   # Mode - Sending command
 
-        self.LCD_LINE_1 = 0x80 # LCD RAM addr for line one
-        self.LCD_LINE_2 = 0xC0 # LCD RAM addr for line two
+        # LCD RAM addr for lines one and two
+        self.LCD_LINE_1 = 0x80
+        self.LCD_LINE_2 = 0xC0
 
         if backlight:
             # on
@@ -21,7 +22,7 @@ class LCD:
             # off
             self.LCD_BACKLIGHT = 0x00
 
-        self.ENABLE = 0b00000100 # Enable bit
+        self.ENABLE = 0b00000100
 
         # Timing constants
         self.E_PULSE = 0.0005
@@ -45,11 +46,8 @@ class LCD:
         self.lcd_byte(0x28, self.LCD_CMD) # 101000 Data length, number of lines, font size
         self.lcd_byte(0x01, self.LCD_CMD) # 000001 Clear display
 
+    # Send byte to data pins: bits = data, mode = 1 for data and 0 for command
     def lcd_byte(self, bits, mode):
-        # Send byte to data pins
-        # bits = data
-        # mode = 1 for data, 0 for command
-
         bits_high = mode | (bits & 0xF0) | self.LCD_BACKLIGHT
         bits_low = mode | ((bits<<4) & 0xF0) | self.LCD_BACKLIGHT
 
@@ -68,8 +66,8 @@ class LCD:
         self.bus.write_byte(self.I2C_ADDR,(bits & ~self.ENABLE))
         time.sleep(self.E_DELAY)
 
+    # Display message string on LCD line 1 or 2
     def message(self, string, line = 1):
-        # display message string on LCD line 1 or 2
         if line == 1:
             lcd_line = self.LCD_LINE_1
         elif line == 2:
@@ -84,6 +82,6 @@ class LCD:
         for i in range(self.LCD_WIDTH):
             self.lcd_byte(ord(string[i]), self.LCD_CHR)
 
+    # Clear LCD display
     def clear(self):
-        # clear LCD display
         self.lcd_byte(0x01, self.LCD_CMD)
