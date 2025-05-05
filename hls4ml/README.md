@@ -36,8 +36,12 @@ hls_model.build(csim=False)
 
 <h2>Results</h2>
 
-The tool did output many hierarchical verilog files. It converted FP32 into INT16 or 8 (confirm). Lowest level of the verilog just does this
+Code File [hls4ml.py](https://github.com/TC4451/Wake_word_sign_digits/blob/main/hls4ml/hls4ml.py)
+
+The tool did output many hierarchical verilog files. It converted FP32 into INT8. Lowest level of the verilog just does this
 
 assign dout = $signed(din0) * $signed({din1});
 
-HLS4ML does not have support for BNN? I need XOR not MULT. I might need to write my own verilog code for the BNN layer.
+HLS4ML does not have support for BNN? I need XOR not MULT.
+
+Summary - Will need to write the verilog for the BNN by hand
